@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IncomingFileRepository extends JpaRepository<IncomingFile, String> {
+
+    IncomingFile findFirstByFilename(String filename);
 }
