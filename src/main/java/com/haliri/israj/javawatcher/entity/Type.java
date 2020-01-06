@@ -1,5 +1,5 @@
 package com.haliri.israj.javawatcher.entity;
 
 public enum  Type {
-    PROCESSED, DONE;
+    PROCESSED, DONE, FAILED;
 }

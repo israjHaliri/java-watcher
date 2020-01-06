@@ -29,7 +29,7 @@ public class IncomingFileService {
             incomingFileRepository.save(incomingFile);
 
             new Thread(() -> {
-                processDetailFile(filename);
+                Type type = processDetailFile(filename);
 
                 try {
                     Thread.sleep(60000);
@@ -38,7 +38,7 @@ public class IncomingFileService {
                 }
 
                 App.getLogger(this).info("UPDATE STATE " + filename);
-                incomingFile.setStatus(Type.DONE);
+                incomingFile.setStatus(type);
                 incomingFileRepository.save(incomingFile);
 
             }).start();
@@ -49,7 +49,19 @@ public class IncomingFileService {
         }
     }
 
-    public void processDetailFile(String filename) {
+    public Type processDetailFile(String filename) {
         App.getLogger(this).info("PROCESSING DETAIL " + filename);
+
+        try{
+//            save content bulk/batch
+//            List<Object> dataList = Arrays.asList("1", "2");
+//            customerRepository.saveAll(dataList);
+
+            return Type.DONE;
+        }catch (Exception e){
+
+            //if something wrong with content then update to FAILED
+            return Type.FAILED;
+        }
     }
 }
