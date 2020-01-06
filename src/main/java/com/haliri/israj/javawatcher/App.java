@@ -1,7 +1,11 @@
 package com.haliri.israj.javawatcher;
 
+import com.haliri.israj.javawatcher.entity.IncomingFile;
+import com.haliri.israj.javawatcher.service.IncomingFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,11 +16,17 @@ import static java.nio.file.StandardWatchEventKinds.*;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 @SpringBootApplication
-public class App {
+public class App implements CommandLineRunner {
+
+	@Autowired
+	private IncomingFileService incomingFileService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);
+	}
 
+	@Override
+	public void run(String... arg) throws Exception {
 		initWatcher();
 	}
 
@@ -24,8 +34,9 @@ public class App {
 		return LoggerFactory.getLogger(object.getClass());
 	}
 
-	private static void initWatcher() {
+	private void initWatcher() {
 		try {
+
 			WatchService watcher = FileSystems.getDefault().newWatchService();
 
 			//change this part to your dir
@@ -46,7 +57,9 @@ public class App {
 
 					if (kind == ENTRY_CREATE) {
 						App.getLogger(App.class).info("New file added : {}", fileName);
+						incomingFileService.processFile(fileName.getFileName().toString());
 					}
+
 					if (kind == ENTRY_DELETE) {
 						App.getLogger(App.class).info("File deleted : {}", fileName);
 					}
