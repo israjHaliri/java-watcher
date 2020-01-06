@@ -15,23 +15,25 @@ public class IncomingFileService {
     @Autowired
     private IncomingFileRepository incomingFileRepository;
 
-    public void processFile(String filename){
+    public void processFile(String filename) {
         IncomingFile incomingFile = new IncomingFile();
         incomingFile.setFilename(filename);
         incomingFile.setDateCreated(new Date());
         incomingFile.setStatus(Type.PROCESSED);
 
-        //handle by pesimistic locking
         try {
             incomingFileRepository.save(incomingFile);
 
             processDetailFile();
-        }catch (Exception e){
+
+            incomingFile.setStatus(Type.DONE);
+            incomingFileRepository.save(incomingFile);
+        } catch (Exception e) {
             App.getLogger(this).info("Can't process file because already processed");
         }
     }
 
-    public void processDetailFile(){
+    public void processDetailFile() {
         App.getLogger(this).info("PROCESSING DETAIL");
     }
 }

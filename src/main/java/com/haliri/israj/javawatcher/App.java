@@ -56,16 +56,8 @@ public class App implements CommandLineRunner {
 					Path fileName = ev.context();
 
 					if (kind == ENTRY_CREATE) {
-						App.getLogger(App.class).info("New file added : {}", fileName);
+						App.getLogger(App.class).info("NEW FILE ADDED : {}", fileName);
 						incomingFileService.processFile(fileName.getFileName().toString());
-					}
-
-					if (kind == ENTRY_DELETE) {
-						App.getLogger(App.class).info("File deleted : {}", fileName);
-					}
-
-					if (kind == ENTRY_MODIFY) {
-						App.getLogger(App.class).info("File modified {}", fileName);
 					}
 				}
 
